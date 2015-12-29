@@ -1,0 +1,8 @@
+[user]
+	name = Michael V. Battista
+	email = github@mvbattista.com
+[alias]
+	tree = log --graph --oneline --decorate --all
+	graph = log --graph --oneline --decorate
+	st = status -sb
+
