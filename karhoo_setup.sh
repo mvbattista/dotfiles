@@ -48,20 +48,24 @@ xcode-select --install
 
 brew cask
 
-brew cask install --appdir="/Applications" sublime-text-3
+brew cask install --appdir="/Applications" sublime-text
 brew cask install --appdir="/Applications" pgadmin3
 brew cask install --appdir="/Applications" google-chrome
 brew cask install --appdir="/Applications" firefox
 brew cask install --appdir="/Applications" filezilla
 brew cask install --appdir="/Applications" iterm2
-brew cask install --appdir="/Applications" source-tree
+brew cask install --appdir="/Applications" sourcetree
 brew cask install --appdir="/Applications" macdown
 brew cask install --appdir="/Applications" github-desktop
 brew cask install --appdir="/Applications" coda
 brew cask install --appdir="/Applications" vlc
 brew cask install --appdir="/Applications" alfred
+brew cask install --appdir="/Applications" dash
+brew cask install --appdir="/Applications" hipchat
+brew cask install --appdir="/Applications" skype
 
 brew cask alfred link
+brew cask cleanup
 
 brew install wget
 brew install python3
@@ -81,4 +85,6 @@ pip3 install Django
 
 wget -O ~/.bashrc https://raw.githubusercontent.com/mvbattista/dotfiles/master/.bashrc
 wget -O ~/.gitconfig https://raw.githubusercontent.com/mvbattista/dotfiles/master/.gitconfig
+wget -O ~/.bash_profile https://raw.githubusercontent.com/mvbattista/dotfiles/master/.bash_profile
+wget -O ~/.vimrc https://raw.githubusercontent.com/mvbattista/dotfiles/master/.vimrc
 
