@@ -63,6 +63,8 @@ brew cask install --appdir="/Applications" alfred
 brew cask install --appdir="/Applications" dash
 brew cask install --appdir="/Applications" hipchat
 brew cask install --appdir="/Applications" skype
+brew cask install --appdir="/Applications" microsoft-office
+brew cask install --appdir="/Applications" pycharm
 
 brew cask alfred link
 brew cask cleanup
@@ -71,15 +73,19 @@ brew install wget
 brew install python3
 brew install python
 brew install postgresql --with-python
+brew install mysql
 launchctl load ~/Library/LaunchAgents/homebrew.mxcl.postgresql.plist
 brew install chromedriver
 brew install chrome-cli
 brew install youtube-dl
 brew install ffmpeg
 brew install ack
-
+brew install autoenv
+brew install docker
+brew install docker-compose
 
 pip3 install virtualenv
+pip3 install virtualenvwrapper
 pip3 install selenium
 pip3 install Django
 
