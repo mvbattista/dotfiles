@@ -64,7 +64,7 @@ brew cask install --appdir="/Applications" dash
 brew cask install --appdir="/Applications" hipchat
 brew cask install --appdir="/Applications" skype
 brew cask install --appdir="/Applications" microsoft-office
-brew cask install --appdir="/Applications" pycharm
+brew cask install --appdir="/Applications" pycharm-ce
 
 brew cask alfred link
 brew cask cleanup
