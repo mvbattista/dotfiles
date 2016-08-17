@@ -1,0 +1,162 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# Karma/Rewards Microservice
+
+Overview
+--------
+This is the repo for the Karhoo **Karma** system. As a microservice, this system functions seperately from core, and is passed information needed through post requests.
+
+As needed, it can return:
+-  **Karma** earned from a transaction, based on the total cost of the transaction and the users tier in the system.
+-  Deduction to make from a transaction, based on the total cost of the transaction.
+-  New total usable **Karma**, based on an amount of **Karma** to add to a user.
+-  **Karma** earned on a trip.
+-  **Karma** a user has available to use.
+
+For more information go to the consumer [FAQ](https://docs.google.com/document/d/1fSS13QD2uwF6YQkyK0E4nTndHcyZMrAkbPlJx-RHtAk)
+
+Getting Started - Development
+-----------------------------
+Create a docker machine
+
+    docker-machine create rewards --driver virtualbox
+    eval $(docker-machine env rewards)
+
+Get IP of Docker Machine, this will be used when interacting with API.
+
+    docker-machine ip rewards
+
+Use Docker to start the API
+
+    docker-compose run initdb
+    docker-compose up api
+
+(Optional) Set port forwarding on 8000 and 3306 from virtualbox for the dockermachine.
+
+
+Example Usage
+-------------
+
+Some sample client functions are in the examples directory of this repo. These examples
+are simple wrappers for the post requests and show how integration could work.
+
+If port forwarding wasn't set through virtual box, set the host in the examples.py
+
+```python
+    from examples import RewardsClient
+    client = RewardsClient()
+    earned_points = client.earn_points('tripid', 'userid', 50.25, 'USD')
+    # earned_points is equal to 101, the amount of points earned by a trip of 50.25 USD
+```
+
+
+## Points Collection [/rewards/points/{user_id}]
++ Parameters
+    + user_id: testuser (required) - Unique identifier for a user
+
+### Get Usable Points [GET]
+
++ Response 200 (application/json)
+
+        2000            
+
+### Add Usable Points [POST]
+
++ Request (application/json)
+
+        {
+            "event_id": "4",
+            "points": "500"
+        }
+
++ Response 200 (application/json)
+
+        2500
+
+## Earn Points [/rewards/earn_points/{user_id}]
++ Parameters
+    + user_id: testuser (required) - Unique identifier for a user
+
+### Get Earned Points [GET]
+
++ Response 200 (application/json)
+
+        2000            
+
+### Add Earned Points [POST]
+
++ Request (application/json)
+
+        {
+            "trip_id": "trip1",
+            "total": "40.53",
+            "currency": "USD"
+        }
+
++ Response 200 (application/json)
+
+        81
+
+## Use Points [/rewards/use_points/{user_id}]
++ Parameters
+    + user_id: testuser (required) - Unique identifier for a user
+
+
+### Use Points [POST]
+
++ Request (application/json)
+
+        {
+            "trip_id": "trip1",
+            "subtotal": "40.53",
+            "currency": "USD"
+        }
+
++ Response 200 (application/json)
+
+        4.10
+
+## Trip Points [/rewards/trip_points/{trip_id}]
++ Parameters
+    + trip_id: testuser (required) - Unique identifier for a trip
+
+
+### Get Points Earned From Trip [GET]
+
++ Response 200 (application/json)
+
+        {
+            "used": 0,
+            "earned": 0
+        }
+
+## User History [/rewards/history/{user_id}]
++ Parameters
+    + user_id: testuser (required) - Unique identifier for a user
+
+
+### Get User's History [GET]
+
++ Response 200 (application/json)
+
+        {
+            "1": {
+                "points_prior": "0",
+                "event_id": "4",
+                "timestamp": "2016-08-17 15:21:23",
+                "trip_id": "None",
+                "user_id": "1",
+                "id": "1",
+                "points_after": "200"
+            },
+            "2": {
+                "points_prior": "200",
+                "event_id": "4",
+                "timestamp": "2016-08-17 15:22:55",
+                "trip_id": "None",
+                "user_id": "1",
+                "id": "2",
+                "points_after": "400"
+            }
+        }
