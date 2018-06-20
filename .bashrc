@@ -16,6 +16,7 @@ perl_critic() { lwp-request -m POST http://perlcritic.com/perl/critic.pl
 < $1 ; }
 fnp() { find . -name $1 -print ; }
 fnip() { find . -iname $1 -print ; }
+portkiller() { kill -9 `lsof -i TCP:"${1}" | grep LISTEN | awk '{print $2}'` ; }
 
 
 # tree = log --graph --oneline --decorate --all
