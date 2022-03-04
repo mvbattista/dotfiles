@@ -1,0 +1,95 @@
+# Taps
+tap 'homebrew/cask-fonts'
+tap 'homebrew/cask-versions'
+tap 'heroku/brew'
+
+# Install CLI Tools
+## Shell Utilities
+brew 'zsh'
+brew 'jq'
+brew 'docker-compose'
+brew 'ack'
+
+brew 'coreutils'
+brew 'findutils'
+brew 'autojump'
+brew 'zsh-completions'
+brew 'tmux'
+brew 'q'
+
+## Network Utilities
+brew 'htop'
+brew 'wget'
+
+brew 'nmap'
+brew 'mtr'
+
+## System Utilities
+brew 'terminal-notifier'
+brew 'tree'
+brew 'mackup'
+brew 'mas'
+brew 'trash'
+
+## Dev Utilities
+brew 'git'
+brew 'awscli'
+brew 'node'
+
+brew 'diff-so-fancy'
+brew 'heroku'
+brew 'reattach-to-user-namespace'
+brew 'w3m'
+brew 'nvm'
+
+# Mac Apps
+## Communication
+cask 'slack'
+cask 'skype'
+
+## Productivity
+cask 'alfred'
+cask 'go2shell'
+cask 'docker'
+cask 'google-chrome'
+cask 'rectangle'
+cask 'keycastr'
+cask 'clipy'
+cask 'cheatsheet'
+
+## System
+cask 'skitch'
+cask 'the-unarchiver'
+cask 'coconutbattery'
+cask 'appcleaner'
+cask 'namechanger'
+
+## Editor
+cask 'pycharm'
+cask 'macdown'
+brew 'vim'
+
+## Development
+cask 'atext'
+cask 'diffmerge'
+cask 'fastlane'
+cask 'firefox'
+cask 'gas-mask'
+cask 'gpg-suite'
+cask 'imageoptim'
+cask 'iterm2'
+cask 'java8'
+cask 'ngrok'
+cask 'postman'
+cask 'robo-3t'
+cask 'sequel-pro'
+cask 'psequel'
+cask 'sourcetree'
+
+# Fonts
+cask 'font-source-code-pro-for-powerline'
+cask 'font-source-code-pro'
+cask 'font-source-sans-pro'
+
+# App
+mas 'XCode', id: 497799835
