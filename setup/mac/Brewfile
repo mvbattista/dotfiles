@@ -9,38 +9,40 @@ brew 'zsh'
 brew 'jq'
 brew 'docker-compose'
 brew 'ack'
+brew 'autojump' # faster navigation through directories
 
-brew 'coreutils'
-brew 'findutils'
-brew 'autojump'
-brew 'zsh-completions'
-brew 'tmux'
-brew 'q'
+# brew 'coreutils' # (many already in macOS terminal)
+# brew 'findutils' # (many already in macOS terminal)
+# brew 'zsh-completions' # (not easily installed with oh-my-zsh)
+# brew 'tmux' # (terminal session management)
+# brew 'q' # (run SQL like queries on CSVs)
 
 ## Network Utilities
 brew 'htop'
 brew 'wget'
+brew 'nmap' # (network and port scanner)
 
-brew 'nmap'
-brew 'mtr'
+# brew 'mtr' # (traceroute and ping combined)
 
 ## System Utilities
-brew 'terminal-notifier'
-brew 'tree'
-brew 'mackup'
+brew 'tree' # (creates terminal tree of directories and websites)
 brew 'mas'
-brew 'trash'
+brew 'trash' # (CLI tool to move file or folder to Trash)
+
+# brew 'mackup' # (back up and restore Mac settings)
+# brew 'terminal-notifier' # (create Mac notification from terminal)
 
 ## Dev Utilities
 brew 'git'
 brew 'awscli'
 brew 'node'
-
 brew 'diff-so-fancy'
 brew 'heroku'
-brew 'reattach-to-user-namespace'
-brew 'w3m'
-brew 'nvm'
+brew 'w3m' # (text based web browser, like Lynx)
+brew 'nvm' # (use different versions of npm)
+
+# brew 'reattach-to-user-namespace' # (tool for tmux)
+
 
 # Mac Apps
 ## Communication
@@ -49,9 +51,10 @@ cask 'skype'
 
 ## Productivity
 cask 'alfred'
+cask 'google-chrome'
+
 cask 'go2shell'
 cask 'docker'
-cask 'google-chrome'
 cask 'rectangle'
 cask 'keycastr'
 cask 'clipy'
@@ -68,8 +71,12 @@ cask 'namechanger'
 cask 'pycharm'
 cask 'macdown'
 brew 'vim'
+# cask 'visual-studio-code'
 
 ## Development
+cask 'iterm2'
+cask 'postman'
+
 cask 'atext'
 cask 'diffmerge'
 cask 'fastlane'
@@ -77,10 +84,8 @@ cask 'firefox'
 cask 'gas-mask'
 cask 'gpg-suite'
 cask 'imageoptim'
-cask 'iterm2'
 cask 'java8'
 cask 'ngrok'
-cask 'postman'
 cask 'robo-3t'
 cask 'sequel-pro'
 cask 'psequel'

@@ -160,3 +160,8 @@ alias terraform=pluralith_terraform
 alias all_aws_accounts="AWS_PROFILE=viacbs-master aws organizations list-accounts |jq -r '.Accounts[] | .Id + \",\" + .Name'|sort -t\",\" -k2"
 
 alias awsauth='cd ~/Documents/Github/cbsi-cloudarch/okta-aws-cli && ./awscli sts get-caller-identity; cd -'
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
