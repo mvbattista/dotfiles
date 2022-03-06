@@ -152,14 +152,14 @@ export LC_ALL="en_US.UTF-8"
 # export PATH="/Users/mbatt0909/Documents/Github/cmg-rv/urs-tools/bin:$PATH"
 
 
-# >>> Pluralith >>>
-. ~/Pluralith/pluralith.sh --source-only
-alias terraform=pluralith_terraform
-# <<< Pluralith <<
-
-alias all_aws_accounts="AWS_PROFILE=viacbs-master aws organizations list-accounts |jq -r '.Accounts[] | .Id + \",\" + .Name'|sort -t\",\" -k2"
-
-alias awsauth='cd ~/Documents/Github/cbsi-cloudarch/okta-aws-cli && ./awscli sts get-caller-identity; cd -'
+# # >>> Pluralith >>>
+# . ~/Pluralith/pluralith.sh --source-only
+# alias terraform=pluralith_terraform
+# # <<< Pluralith <<
+#
+# alias all_aws_accounts="AWS_PROFILE=viacbs-master aws organizations list-accounts |jq -r '.Accounts[] | .Id + \",\" + .Name'|sort -t\",\" -k2"
+#
+# alias awsauth='cd ~/Documents/Github/cbsi-cloudarch/okta-aws-cli && ./awscli sts get-caller-identity; cd -'
 
 # NVM
 export NVM_DIR="$HOME/.nvm"

@@ -1,100 +1,148 @@
 # Taps
-tap 'homebrew/cask-fonts'
-tap 'homebrew/cask-versions'
 tap 'heroku/brew'
+
+# tap 'homebrew/cask-fonts'
+# tap 'homebrew/cask-versions'
 
 # Install CLI Tools
 ## Shell Utilities
-brew 'zsh'
-brew 'jq'
-brew 'docker-compose'
 brew 'ack'
 brew 'autojump' # faster navigation through directories
+brew 'docker-compose'
+brew 'jq'
+brew 'zsh'
 
 # brew 'coreutils' # (many already in macOS terminal)
 # brew 'findutils' # (many already in macOS terminal)
-# brew 'zsh-completions' # (not easily installed with oh-my-zsh)
-# brew 'tmux' # (terminal session management)
 # brew 'q' # (run SQL like queries on CSVs)
+# brew 'tmux' # (terminal session management)
+# brew 'zsh-completions' # (not easily installed with oh-my-zsh)
 
 ## Network Utilities
 brew 'htop'
-brew 'wget'
 brew 'nmap' # (network and port scanner)
+brew 'wget'
 
 # brew 'mtr' # (traceroute and ping combined)
 
 ## System Utilities
-brew 'tree' # (creates terminal tree of directories and websites)
 brew 'mas'
 brew 'trash' # (CLI tool to move file or folder to Trash)
+brew 'tree' # (creates terminal tree of directories and websites)
 
 # brew 'mackup' # (back up and restore Mac settings)
 # brew 'terminal-notifier' # (create Mac notification from terminal)
 
 ## Dev Utilities
-brew 'git'
 brew 'awscli'
-brew 'node'
 brew 'diff-so-fancy'
+brew 'git'
 brew 'heroku'
-brew 'w3m' # (text based web browser, like Lynx)
+brew 'mysql'
+brew 'node'
 brew 'nvm' # (use different versions of npm)
+brew 'postgres'
+brew 'python3'
+brew 'sqlite'
+brew 'w3m' # (text based web browser, like Lynx)
+brew 'watchman'
 
 # brew 'reattach-to-user-namespace' # (tool for tmux)
+
+## Media
+brew 'cmatrix'
+brew 'ffmpeg'
+brew 'youtube-dl'
 
 
 # Mac Apps
 ## Communication
-cask 'slack'
+cask 'discord'
 cask 'skype'
+cask 'slack'
+cask 'zoomus'
+
+# cask 'keybase'
 
 ## Productivity
 cask 'alfred'
+cask 'cheatsheet' # (Shows command shortcuts by holding command down)
+cask 'clipy' # (clipboard extension)
+cask 'docker'
+cask 'go2shell' # Be sure to set up after run
 cask 'google-chrome'
 
-cask 'go2shell'
-cask 'docker'
-cask 'rectangle'
-cask 'keycastr'
-cask 'clipy'
-cask 'cheatsheet'
+# cask 'keycastr' # (share keystrokes for screencasts)
+# cask 'rectangle' # (Move and resize windows using keyboard shortcuts or snap areas)
 
 ## System
-cask 'skitch'
-cask 'the-unarchiver'
-cask 'coconutbattery'
-cask 'appcleaner'
-cask 'namechanger'
+cask 'balenaetcher' # (RPi SD drive formatter)
+cask 'coconutbattery' # (detailed battery stats)
+cask 'grandperspective' # (HD space GUI)
+cask 'the-unarchiver' # (compressed file scanner and expander)
+
+# cask 'appcleaner' # (application uninstaller)
+# cask 'namechanger' # (batch file renamer)
+# cask 'skitch' # (screenshot annotator)
 
 ## Editor
-cask 'pycharm'
+cask 'goland'
 cask 'macdown'
+cask 'openoffice'
+cask 'pycharm'
+cask 'sublime-text'
 brew 'vim'
+
+# cask 'atom'
+# cask 'pycharm-ce'
 # cask 'visual-studio-code'
 
 ## Development
-cask 'iterm2'
-cask 'postman'
-
-cask 'atext'
-cask 'diffmerge'
-cask 'fastlane'
+cask 'another-redis-desktop-manager'
+cask 'cyberduck'
+cask 'dash'
+cask 'dbeaver-community' # (DB GUI)
+cask 'devtoys' # (dev utility for common tasks)
+cask 'fastlane' # (app build, release, and store deployment tool)
 cask 'firefox'
-cask 'gas-mask'
-cask 'gpg-suite'
-cask 'imageoptim'
-cask 'java8'
+cask 'github'
+cask 'imageoptim' # (compress images and removes metadata for websites)
+cask 'iterm2'
+cask 'lens'
+cask 'meld'
 cask 'ngrok'
-cask 'robo-3t'
-cask 'sequel-pro'
-cask 'psequel'
-cask 'sourcetree'
+cask 'pgadmin4'
+cask 'postman'
+cask 'sublime-text'
+cask 'robo-3t' # (MongoDB GUI)
+cask 'vnc-viewer'
+
+# cask 'atext' # (replace abbreviations while typing)
+# cask 'diffmerge' # (file merger, 'meld' recommended)
+# cask 'gas-mask' # (hosts manager, 'switchhosts' recommended)
+# cask 'gpg-suite' # (GPG encryption GUI)
+# cask 'java'
+# cask 'psequel' # (cask discontinued)
+# cask 'sequel-pro' # (MySQL/MariaDB GUI)
+# cask 'sourcetree'
+
+# Media
+cask 'audacity' # (Should be safe now)
+cask 'heroic' # (Heroic Games Launcher for GOG games (old Star Trek games))
+cask 'iptvnator'
+cask 'obs'
+cask 'qbittorrent'
+cask 'spotify'
+cask 'steam'
+cask 'transmission-remote-gui'
+cask 'vlc'
 
 # Fonts
-cask 'font-source-code-pro-for-powerline'
-cask 'font-source-code-pro'
-cask 'font-source-sans-pro'
+# cask 'font-source-code-pro-for-powerline'
+# cask 'font-source-code-pro'
+# cask 'font-source-sans-pro'
 
 # App
 mas 'XCode', id: 497799835
+mas 'Friendly Streaming', id: 553245401
+mas 'BetterSnapTool', id: 417375580
