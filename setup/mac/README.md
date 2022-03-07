@@ -1,7 +1,7 @@
 # Basic Setup
 ```
-git clone https://gist.github.com/059e210f8fe15e7eadc4a28e8b3e6b27.git setup
-cd setup && sh ./init.sh
+git clone https://github.com/mvbattista/dotfiles.git autosetup
+cd autosetup/setup/mac && sh ./init.sh
 ```
 # Shell Configuration
 
