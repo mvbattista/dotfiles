@@ -3,15 +3,18 @@
 git clone https://github.com/mvbattista/dotfiles.git autosetup
 cd autosetup/setup/mac && sh ./init.sh
 ```
-# Shell Configuration
 
-1. Enable plugins - edit ***~/.zshrc***
+[comment]: <> (# Shell Configuration)
 
-    Update plugins
+[comment]: <> (1. Enable plugins - edit ***~/.zshrc***)
 
-    ```
-     plugins=(autojump git brew common-aliases zsh-autosuggestions copydir copyfile encode64 node osx sublime tmux xcode pod docker git-extras git-prompt)
-    ```
+[comment]: <> (    Update plugins)
+
+[comment]: <> (    ```)
+
+[comment]: <> (     plugins=&#40;autojump git brew common-aliases zsh-autosuggestions copydir copyfile encode64 node osx sublime tmux xcode pod docker git-extras git-prompt&#41;)
+
+[comment]: <> (    ```)
 
 # Generate Your Development SSH Key
 1. Generate your key for the development machine

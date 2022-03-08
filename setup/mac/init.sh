@@ -62,6 +62,18 @@ echo "source ~/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlightin
 #git config --global alias.lg "log --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --"
 #git config --global alias.tree "log --graph --full-history --all --color --date=short --pretty=format:'%Cred%x09%h %Creset%ad%Cblue%d %Creset %s %C(bold)(%an)%Creset'"
 
+#echo "Adding SSH key to Github"
+#rm -rf ~/.ssh/id_rsa ~/.ssh/id_rsa.pub
+#read -p "Enter github email : " email
+#echo "Using email $email"
+#ssh-keygen -t rsa -b 4096 -C "$email"
+#ssh-add ~/.ssh/id_rsa
+#pub=`cat ~/.ssh/id_rsa.pub`
+#read -p "Enter github username: " githubuser
+#echo "Using username $githubuser"
+#read -s -p "Enter github password for user $githubuser: " githubpass
+##curl -u "$githubuser:$githubpass" -X POST -d "{\"title\":\"`hostname`\",\"key\":\"$pub\"}" https://api.github.com/user/keys
+#curl -H "Authorization: token $github_token" --data '{"title":"test-key","key":"$pub"}' https://api.github.com/user/keys
 
 echo "Enabling Services"
 open /Applications/Alfred\ 4.app
