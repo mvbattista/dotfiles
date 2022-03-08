@@ -105,7 +105,8 @@ portkiller() { kill -9 `lsof -i TCP:"${1}" | grep LISTEN | awk '{print $2}'` ; }
 
 #PROMPT='⚡%-%F{blue}%c%f $ '
 # PROMPT='%(?:%{%}➜ :%{%}➜ )⚡  %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)'
-PROMPT='%(?:%{%}➜ :%{%}➜ )⚡  %{$fg[cyan]%}%c%{$reset_color%} $ '
+# PROMPT='%(?:%{%}➜ :%{%}➜ )⚡  %{$fg[cyan]%}%c%{$reset_color%} $ '
+PROMPT='%(?:%{%}➜ :%{%}➜ )⚡ %F{cyan}%c%f $ '
 RPROMPT='$(git_prompt_info)'
 ZLE_RPROMPT_INDENT=0
 
@@ -136,10 +137,31 @@ setopt APPEND_HISTORY
 # adds commands as they are typed, not at shell exit
 setopt INC_APPEND_HISTORY
 # expire duplicates first
-setopt HIST_EXPIRE_DUPS_FIRST 
+setopt HIST_EXPIRE_DUPS_FIRST
 # do not store duplications
 setopt HIST_IGNORE_DUPS
 #ignore duplicates when searching
 setopt HIST_FIND_NO_DUPS
 # removes blank lines from history
 setopt HIST_REDUCE_BLANKS
+
+export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
+
+export LC_ALL="en_US.UTF-8"
+# export PATH="/usr/local/opt/terraform@0.11/bin:$PATH"
+# export PATH="/Users/mbatt0909/Documents/Github/cmg-rv/urs-tools/bin:$PATH"
+
+
+# # >>> Pluralith >>>
+# . ~/Pluralith/pluralith.sh --source-only
+# alias terraform=pluralith_terraform
+# # <<< Pluralith <<
+#
+# alias all_aws_accounts="AWS_PROFILE=viacbs-master aws organizations list-accounts |jq -r '.Accounts[] | .Id + \",\" + .Name'|sort -t\",\" -k2"
+#
+# alias awsauth='cd ~/Documents/Github/cbsi-cloudarch/okta-aws-cli && ./awscli sts get-caller-identity; cd -'
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion

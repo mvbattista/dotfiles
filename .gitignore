@@ -1,7 +1,7 @@
 # Ignore all pycache
 __pycache__/*
 
-# Ignore all Intellij files
+# Ignore all IntelliJ files
 .idea/*
 
 # Ignore all Mac Finder files

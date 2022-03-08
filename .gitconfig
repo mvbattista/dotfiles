@@ -5,4 +5,12 @@
 	tree = log --graph --oneline --decorate --all
 	graph = log --graph --oneline --decorate
 	st = status -sb
+[core]
+    pager = diff-so-fancy | less --tabs=4 -RFX
+[interactive]
+    diffFilter = diff-so-fancy --patch
 
+# TODO - figure out best merge tool
+
+# git config --global core.pager "diff-so-fancy | less --tabs=4 -RFX"
+# git config --global interactive.diffFilter "diff-so-fancy --patch"
