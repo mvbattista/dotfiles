@@ -71,6 +71,7 @@ cask 'clipy' # (clipboard extension)
 cask 'docker'
 cask 'go2shell' # Be sure to set up after run
 cask 'google-chrome'
+cask 'quicken'
 
 # cask 'keycastr' # (share keystrokes for screencasts)
 # cask 'rectangle' # (Move and resize windows using keyboard shortcuts or snap areas)

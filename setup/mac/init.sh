@@ -15,6 +15,9 @@ defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server Net
 # For NVM
 mkdir ~/.nvm
 
+echo "Install XCode CLI Tool"
+xcode-select --install
+
 echo "Installing Homebrew"
 if test ! $(which brew); then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -23,9 +26,6 @@ brew update
 echo "Install Homebrew Packages (needed for Brewfile to run)"
 brew tap homebrew/bundle
 brew bundle
-
-echo "Install XCode CLI Tool"
-xcode-select --install
 
 # Move dotfiles
 echo "Move dotfiles"
