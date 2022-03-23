@@ -60,7 +60,7 @@ brew 'youtube-dl'
 cask 'discord'
 cask 'skype'
 cask 'slack'
-cask 'zoomus'
+cask 'zoom'
 
 # cask 'keybase'
 
