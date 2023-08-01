@@ -27,6 +27,8 @@ echo "Install Homebrew Packages (needed for Brewfile to run)"
 brew tap homebrew/bundle
 brew bundle
 
+# TODO - add Homebrew bin directory to /etc/paths
+
 # Move dotfiles
 echo "Move dotfiles"
 wget -O ~/.zshrc https://raw.githubusercontent.com/mvbattista/dotfiles/master/.zshrc
