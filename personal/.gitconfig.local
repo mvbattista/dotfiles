@@ -1,0 +1,5 @@
+[user]
+	name = Michael V. Battista
+	email = github@mvbattista.com
+[url "git@github.com:"]
+	insteadOf = https://github.com/

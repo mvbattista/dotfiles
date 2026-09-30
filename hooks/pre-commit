@@ -1,0 +1,4 @@
+#!/bin/sh
+# Block commits that contain secrets. Shared by this repo (core.hooksPath=hooks) and the
+# work/ submodule (core.hooksPath=../hooks). See secret-patterns.sh.
+exec "$(dirname "$0")/../sync.sh" scan

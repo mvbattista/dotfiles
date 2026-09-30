@@ -49,6 +49,8 @@ while read -r layer repo_path home_path; do
     mkdir -p "$(dirname "$dst")"
     [ -e "$dst" ] && cp -R "$dst" "$dst.bak"
     cp -R "$src" "$dst"
+    # ssh refuses loose permissions
+    case "$dst" in "$HOME"/.ssh/*) chmod 700 "$HOME/.ssh"; chmod 600 "$dst" ;; esac
     echo "copied: $layer/$repo_path -> $dst"
   fi
   copied=$((copied + 1))

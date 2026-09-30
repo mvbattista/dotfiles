@@ -8,3 +8,8 @@ common .gitconfig ~/.gitconfig
 common .vimrc ~/.vimrc
 personal .bashrc ~/.bashrc
 personal .bash_profile ~/.bash_profile
+common .zprofile ~/.zprofile
+common .gitignore_global ~/.gitignore_global
+common .config/btop/btop.conf ~/.config/btop/btop.conf
+work ssh/config ~/.ssh/config
+personal .gitconfig.local ~/.gitconfig.local

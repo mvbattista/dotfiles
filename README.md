@@ -25,7 +25,14 @@ Shared files don't contain identity or employer details. They pull in a per-mach
 ### Secrets
 
 Secrets never live in a layer, public or private. They go in `~/.secrets` (untracked, mode 600), which the profile's `.zshrc.local` sources.
-`~/.secrets` is never listed in `manifest.txt`. `sync.sh pull` refuses any file that looks like it contains a secret.
+`~/.secrets` is never listed in `manifest.txt`.
+
+**Secret guard.** `secret-patterns.sh` defines what counts as a secret. `sync.sh pull` and the `hooks/pre-commit` hook (`sync.sh scan`) refuse credentials in every layer. IPv4 addresses and `/Users/<name>` paths are refused everywhere except `work/`. Enable the hook in each clone:
+
+```sh
+git config core.hooksPath hooks
+git -C work config core.hooksPath ../hooks   # work machines
+```
 
 ## Usage
 
@@ -44,6 +51,12 @@ git submodule update --init --checkout work   # work machines only; needs access
 | `sync.sh push` | repo -> home (runs `install.sh` with the saved profile) |
 
 `manifest.txt` rows: `layer  repo-path (relative to the layer dir)  home-path`.
+
+## What is tracked
+
+Tracked via `manifest.txt` (`common/`: `.zshrc`, `.zprofile`, `.gitconfig`, `.gitignore_global`, `.vimrc`, `btop` config). Deliberately not tracked:
+credentials and cloud/container config (`~/.aws`, `~/.kube`, `~/.docker`, `~/.config/gh`, ...), installer-managed or regenerable state (`~/.oh-my-zsh`, `~/.nvm`, `~/.config/uv/uv-receipt.json`, `~/.gitmoji/gitmojis.json` cache), and SSH keys or `known_hosts`.
+`~/.ssh/config` host blocks live only in the private work layer. `install.sh` sets `~/.ssh` to `700` and copied files under it to `600`.
 
 ## Committing
 

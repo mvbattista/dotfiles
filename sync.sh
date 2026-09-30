@@ -3,6 +3,7 @@
 #   sync.sh check   diff home vs repo; non-zero exit on drift
 #   sync.sh pull    copy drifted home files back into the repo (never commits or pushes)
 #   sync.sh push    repo -> home (runs install.sh)
+#   sync.sh scan    refuse staged content that looks like a secret (run by hooks/pre-commit)
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -10,8 +11,27 @@ MANIFEST="$ROOT/manifest.txt"
 PROFILE_FILE="$HOME/.dotfiles-profile"
 CMD="${1:-check}"
 
-# pull refuses files that look like they hold secrets or machine-specific data
-SECRET_RE='AKIA[0-9A-Z]{16}|gh[pou]_[A-Za-z0-9]{20,}|github_pat_|xox[baprs]-|-----BEGIN [A-Z ]*PRIVATE KEY|[A-Za-z_]*(TOKEN|_KEY|SECRET)[A-Za-z_]*=[^ ]|[Pp]assword *=|([0-9]{1,3}\.){3}[0-9]{1,3}|/Users/[A-Za-z0-9._-]+'
+# shellcheck source=secret-patterns.sh
+. "$ROOT/secret-patterns.sh"
+
+# credentials are refused everywhere; machine/internal details only outside the private work layer
+pattern_for() { if [ "$1" = work ]; then echo "$CRED_RE"; else echo "$CRED_RE|$PUBLIC_RE"; fi; }
+
+if [ "$CMD" = scan ]; then
+  top="$(git rev-parse --show-toplevel)"
+  # inside the work/ submodule the repo is private; at the top level it is public
+  if [ -n "$(git -C "$top" rev-parse --show-superproject-working-tree)" ]; then re="$(pattern_for work)"; else re="$(pattern_for public)"; fi
+  bad=0
+  while IFS= read -r f; do
+    [ "$f" = secret-patterns.sh ] && continue
+    # submodule pointers (mode 160000) have no content to scan
+    git -C "$top" ls-files -s -- "$f" | grep -q '^160000' && continue
+    hits="$(git -C "$top" show ":$f" | grep -EIn "$re" | cut -d: -f1 | head -5 | tr '\n' ' ' || true)"
+    [ -z "$hits" ] || { echo "REFUSED: $f (line(s): $hits)" >&2; bad=1; }
+  done < <(git -C "$top" diff --cached --name-only --diff-filter=ACM)
+  [ "$bad" = 0 ] || { echo "commit blocked: fix the content (values belong in ~/.secrets)" >&2; exit 1; }
+  exit 0
+fi
 
 [ -f "$PROFILE_FILE" ] || { echo "no $PROFILE_FILE; run install.sh --profile personal|work first" >&2; exit 2; }
 PROFILE="$(cat "$PROFILE_FILE")"
@@ -19,7 +39,7 @@ PROFILE="$(cat "$PROFILE_FILE")"
 layer_present() { [ "$1" != work ] || [ -e "$ROOT/work/.git" ]; }
 
 if [ "$CMD" = push ]; then exec "$ROOT/install.sh" --profile "$PROFILE"; fi
-case "$CMD" in check|pull) ;; *) echo "usage: sync.sh check|pull|push" >&2; exit 2 ;; esac
+case "$CMD" in check|pull) ;; *) echo "usage: sync.sh check|pull|push|scan" >&2; exit 2 ;; esac
 
 drift=0
 while read -r layer repo_path home_path; do
@@ -34,8 +54,8 @@ while read -r layer repo_path home_path; do
   drift=1
   if [ "$CMD" = check ]; then
     echo "drift: $layer/$repo_path"
-  elif grep -rEIq "$SECRET_RE" "$dst"; then
-    echo "REFUSED (secret/machine pattern) at: $(grep -rEIn "$SECRET_RE" "$dst" | cut -d: -f1,2 | head -5 | tr '\n' ' ')" >&2
+  elif grep -rEIq "$(pattern_for "$layer")" "$dst"; then
+    echo "REFUSED (secret/machine pattern) at: $(grep -rEIn "$(pattern_for "$layer")" "$dst" | cut -d: -f1,2 | head -5 | tr '\n' ' ')" >&2
     echo "  fix the home file or move the value to ~/.secrets, then re-run" >&2
   else
     cp -R "$dst" "$src"
