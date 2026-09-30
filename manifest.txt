@@ -1,0 +1,3 @@
+# layer  repo-path (relative to the layer dir)  home-path
+# layers: common (always), personal, work (private submodule; skipped when absent)
+# Rows are added as files move into layers (Phases 1-3). Never list secrets, keys, or known_hosts.

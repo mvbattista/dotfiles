@@ -1,0 +1,4 @@
+[submodule "work"]
+	path = work
+	url = git@github.com:mvbattista/dotfiles-private.git
+	update = none
