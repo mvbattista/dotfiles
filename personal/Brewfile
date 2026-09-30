@@ -1,0 +1,21 @@
+# Personal apps and tools (media, games, finance, personal comms)
+# 'not installed' = absent on the work Mac when split (2026-09-30).
+
+brew 'cmatrix'
+brew 'ffmpeg'
+brew 'youtube-dl'
+cask 'discord'
+cask 'skype'  # not installed
+cask 'quicken'  # not installed
+cask 'balenaetcher' # (RPi SD drive formatter) | not installed
+cask 'openoffice'  # not installed
+cask 'audacity' # (Should be safe now) | not installed
+cask 'heroic' # (Heroic Games Launcher for GOG games (old Star Trek games)) | not installed
+cask 'iptvnator'  # not installed
+cask 'obs'  # not installed
+cask 'qbittorrent'  # not installed
+cask 'spotify'
+cask 'steam'
+cask 'transmission-remote-gui'  # not installed
+cask 'vlc'
+mas 'Friendly Streaming', id: 553245401

@@ -1,46 +1,62 @@
 #!/bin/sh
+# New-Mac bootstrap.
+# Usage: sh setup/mac/init.sh <personal|work> [computer-name]
+#   profile        selects the layer installed on top of common/ (see README.md)
+#   computer-name  optional; the hostname is left alone when omitted
 
-# Set Computer name
-# Bonjour name ending in .local
-scutil --set LocalHostName "Defiant"
-# Friendly name shown in System Preferences > Sharing
-scutil --set ComputerName "Defiant"
-# The name recognized by the hostname command
-scutil --set HostName "Defiant"
+PROFILE="${1:?usage: init.sh <personal|work> [computer-name]}"
+case "$PROFILE" in
+  personal|work) ;;
+  *) echo "profile must be 'personal' or 'work'" >&2; exit 2 ;;
+esac
+ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+
+if [ -n "$2" ]; then
+  # Bonjour name ending in .local
+  scutil --set LocalHostName "$2"
+  # Friendly name shown in System Preferences > Sharing
+  scutil --set ComputerName "$2"
+  # The name recognized by the hostname command
+  scutil --set HostName "$2"
+fi
 # Save the computer's serial number in a variable so it can be used in the next command.
 serialNum=$(ioreg -l | awk '/IOPlatformSerialNumber/ { split($0, line, "\""); printf("%s\n", line[4]); }')
 # Set the NetBIOS name as the serial number
 defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$serialNum"
 
 # For NVM
-mkdir ~/.nvm
+mkdir -p ~/.nvm
 
 echo "Install XCode CLI Tool"
 xcode-select --install
 
-echo "Installing Homebrew"
-if test ! $(which brew); then
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+# The work layer is a private submodule; needs access to the private repo
+if [ "$PROFILE" = work ]; then
+  git -C "$ROOT" submodule update --init --checkout work
 fi
+
+echo "Installing Homebrew"
+if ! command -v brew >/dev/null 2>&1; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+# Put Homebrew on PATH now and for future login shells (Apple Silicon: /opt/homebrew, Intel: /usr/local)
+BREW_BIN=/opt/homebrew/bin/brew
+[ -x "$BREW_BIN" ] || BREW_BIN=/usr/local/bin/brew
+eval "$("$BREW_BIN" shellenv)"
+grep -qs 'brew shellenv' ~/.zprofile || echo "eval \"\$($BREW_BIN shellenv)\"" >> ~/.zprofile
 brew update
-echo "Install Homebrew Packages (needed for Brewfile to run)"
-brew tap homebrew/bundle
-brew bundle
+echo "Install Homebrew Packages"
+brew bundle --file="$ROOT/common/Brewfile"
+[ -f "$ROOT/$PROFILE/Brewfile" ] && brew bundle --file="$ROOT/$PROFILE/Brewfile"
 
-# TODO - add Homebrew bin directory to /etc/paths
-
-# Move dotfiles
-echo "Move dotfiles"
-wget -O ~/.zshrc https://raw.githubusercontent.com/mvbattista/dotfiles/main/.zshrc
-wget -O ~/.gitconfig https://raw.githubusercontent.com/mvbattista/dotfiles/main/.gitconfig
-wget -O ~/.gitignore https://raw.githubusercontent.com/mvbattista/dotfiles/main/.gitignore
-wget -O ~/.vimrc https://raw.githubusercontent.com/mvbattista/dotfiles/main/.vimrc
+echo "Install dotfiles ($PROFILE profile)"
+"$ROOT/install.sh" --profile "$PROFILE"
 
 echo "Installing Oh My Zsh"
-sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
-git clone git://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/plugins/zsh-autosuggestions
-git clone git://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/plugins/zsh-syntax-highlighting
-echo "source ~/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" >> ~/.zshrc
+# KEEP_ZSHRC keeps the .zshrc installed above; RUNZSH stops the installer from starting a new shell
+RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 #sed -io 's/^plugins=.*/plugins=(autojump git brew common-aliases zsh-autosuggestions copydir copyfile encode64 node osx sublime tmux xcode pod docker git-extras git-prompt)/' ~/.zshrc
 #sed -io 's/^ZSH_THEME.*/ZSH_THEME="dpoggi"/' ~/.zshrc
 
@@ -78,8 +94,6 @@ echo "source ~/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlightin
 #curl -H "Authorization: token $github_token" --data '{"title":"test-key","key":"$pub"}' https://api.github.com/user/keys
 
 echo "Enabling Services"
-open /Applications/Alfred\ 4.app
-#open /Applications/Gas\ Mask.app
-open /Applications/Clipy.app
-#open /Applications/Rectangle.app
-open /Applications/BetterSnapTool.app
+for app in "Alfred 5" Clipy BetterSnapTool; do
+  open -a "$app" 2>/dev/null || echo "skip: $app is not installed"
+done

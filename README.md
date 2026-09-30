@@ -1,4 +1,58 @@
 # dotfiles
-Repo to hold dotfiles, setup scripts, etc.
 
-https://dotfiles.github.io/
+Personal dotfiles and machine setup, layered so one repo serves every machine.
+
+## Layers
+
+| Layer | Path | Purpose | Visibility |
+|---|---|---|---|
+| common | `common/` | Applies everywhere: `.zshrc`, `.gitconfig`, `.vimrc`, shared tool config | public |
+| personal | `personal/` | Home machines: Raspberry Pi setup, bash files, personal Brewfile | public |
+| work | `work/` | Employer-specific config. **Git submodule** of the private repo `dotfiles-private` | private |
+
+A machine has one **profile**, `personal` or `work`. `common` always applies, plus the profile's layer.
+The profile is saved in `~/.dotfiles-profile`. The setup plan is kept in the private repo (`work/PLAN.md`), not here.
+
+### Local fragments
+
+Shared files don't contain identity or employer details. They pull in a per-machine fragment that the profile layer provides:
+
+| Shared file | Includes | Holds |
+|---|---|---|
+| `common/.zshrc` | `~/.zshrc.local` (sourced just before the syntax-highlighting plugin, which must load last) | PATH additions, aliases, profile env |
+| `common/.gitconfig` | `~/.gitconfig.local` (`[include]`, read last so it overrides) | git identity, Sourcetree tools, `insteadOf`, commit template |
+
+### Secrets
+
+Secrets never live in a layer, public or private. They go in `~/.secrets` (untracked, mode 600), which the profile's `.zshrc.local` sources.
+`~/.secrets` is never listed in `manifest.txt`. `sync.sh pull` refuses any file that looks like it contains a secret.
+
+## Usage
+
+```sh
+git clone git@github.com:mvbattista/dotfiles.git && cd dotfiles
+git submodule update --init --checkout work   # work machines only; needs access to the private repo
+./install.sh --profile work --dry-run         # or --profile personal; shows what would change
+./install.sh --profile work                   # copies files into $HOME, backs up differing targets to *.bak
+```
+
+| Command | What it does |
+|---|---|
+| `install.sh --profile personal\|work [--dry-run]` | repo -> home for `common` + the profile layer. Skips `work/` if the submodule isn't checked out |
+| `sync.sh check` | diff home vs repo per `manifest.txt`; non-zero exit on drift |
+| `sync.sh pull` | copy drifted home files back into the repo; refuses secret-looking content; never commits or pushes |
+| `sync.sh push` | repo -> home (runs `install.sh` with the saved profile) |
+
+`manifest.txt` rows: `layer  repo-path (relative to the layer dir)  home-path`.
+
+## Committing
+
+- Default branch is `main`. Commits use gitmoji and an imperative subject.
+- Work changes are a two-step commit: commit inside `work/` first, then commit the updated submodule pointer here.
+- Author identity is pinned per repo (`git config --local user.email`), including inside `work/`.
+
+## Setup scripts
+
+- `setup/mac/`: new-Mac bootstrap (`init.sh <personal|work> [computer-name]`); see `setup/mac/README.md`.
+- `personal/raspberry-pi/`: Raspberry Pi setup scripts.
+- Homebrew packages: `common/Brewfile` (everywhere) plus `<profile>/Brewfile` (e.g. `personal/Brewfile`); `init.sh` runs both.

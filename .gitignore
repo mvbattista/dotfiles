@@ -7,3 +7,6 @@ __pycache__/*
 # Ignore all Mac Finder files
 .DS_Store
 
+
+# Plan lives in the private work/ submodule
+PLAN.md

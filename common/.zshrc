@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/mvbattista/.oh-my-zsh"
+export ZSH="$HOME/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -12,7 +12,7 @@ ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# a theme from this variable instead of looking in $ZSH/themes/
 # If set to an empty array, this variable will have no effect.
 # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
@@ -23,17 +23,16 @@ ZSH_THEME="robbyrussell"
 # Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# Uncomment one of the following lines to change the auto-update behavior
+# zstyle ':omz:update' mode disabled  # disable automatic updates
+# zstyle ':omz:update' mode auto      # update automatically without asking
+# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
 
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# zstyle ':omz:update' frequency 13
 
 # Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
+# DISABLE_MAGIC_FUNCTIONS="true"
 
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
@@ -45,6 +44,9 @@ ZSH_THEME="robbyrussell"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
+# You can also set it to another string to have that shown instead of the default red dots.
+# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -64,11 +66,12 @@ ZSH_THEME="robbyrussell"
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
 # Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git virtualenvwrapper)
+plugins=(git zsh-autosuggestions
+zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -103,10 +106,18 @@ fnp() { find . -name $1 -print ; }
 fnip() { find . -iname $1 -print ; }
 portkiller() { kill -9 `lsof -i TCP:"${1}" | grep LISTEN | awk '{print $2}'` ; }
 
+show_virtual_env() {
+  if [[ -n "$VIRTUAL_ENV_PROMPT" ]]; then
+    echo "($(basename "$VIRTUAL_ENV_PROMPT")) "
+  fi
+}
+# PROMPT='$(show_virtual_env)'$PROMPT
+
 #PROMPT='⚡%-%F{blue}%c%f $ '
 # PROMPT='%(?:%{%}➜ :%{%}➜ )⚡  %{$fg[cyan]%}%c%{$reset_color%} $(git_prompt_info)'
 # PROMPT='%(?:%{%}➜ :%{%}➜ )⚡  %{$fg[cyan]%}%c%{$reset_color%} $ '
-PROMPT='%(?:%{%}➜ :%{%}➜ )⚡ %F{cyan}%c%f $ '
+# PROMPT='%(?:%{%}➜ :%{%}➜ )⚡  %F{cyan}%c%f $ '
+PROMPT='$(show_virtual_env)➜ ⚡ %F{cyan}%c%f $ '
 RPROMPT='$(git_prompt_info)'
 ZLE_RPROMPT_INDENT=0
 
@@ -124,6 +135,8 @@ export PIP_RESPECT_VIRTUALENV=true
 # else
 #     echo "WARNING: Can't find virtualenvwrapper.sh"
 # fi
+export POETRY_VIRTUALENVS_PATH=$WORKON_HOME
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 # For autoenv
 # source /usr/local/opt/autoenv/activate.sh
@@ -137,7 +150,7 @@ setopt APPEND_HISTORY
 # adds commands as they are typed, not at shell exit
 setopt INC_APPEND_HISTORY
 # expire duplicates first
-setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_EXPIRE_DUPS_FIRST 
 # do not store duplications
 setopt HIST_IGNORE_DUPS
 #ignore duplicates when searching
@@ -146,22 +159,20 @@ setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
 
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
 
 export LC_ALL="en_US.UTF-8"
 # export PATH="/usr/local/opt/terraform@0.11/bin:$PATH"
-# export PATH="/Users/mbatt0909/Documents/Github/cmg-rv/urs-tools/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+export PATH="/opt/homebrew/share/google-cloud-sdk/bin/:$PATH"
+export PATH="/Applications/PyCharm.app/Contents/MacOS:$PATH"
 
+# Profile-specific config (work/personal), installed as ~/.zshrc.local by install.sh.
+# Sourced before the syntax-highlighting plugin, which must be loaded last.
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
-# # >>> Pluralith >>>
-# . ~/Pluralith/pluralith.sh --source-only
-# alias terraform=pluralith_terraform
-# # <<< Pluralith <<
-#
-# alias all_aws_accounts="AWS_PROFILE=viacbs-master aws organizations list-accounts |jq -r '.Accounts[] | .Id + \",\" + .Name'|sort -t\",\" -k2"
-#
-# alias awsauth='cd ~/Documents/Github/cbsi-cloudarch/okta-aws-cli && ./awscli sts get-caller-identity; cd -'
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && \. "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
