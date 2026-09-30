@@ -31,10 +31,10 @@ brew bundle
 
 # Move dotfiles
 echo "Move dotfiles"
-wget -O ~/.zshrc https://raw.githubusercontent.com/mvbattista/dotfiles/master/.zshrc
-wget -O ~/.gitconfig https://raw.githubusercontent.com/mvbattista/dotfiles/master/.gitconfig
-wget -O ~/.gitignore https://raw.githubusercontent.com/mvbattista/dotfiles/master/.gitignore
-wget -O ~/.vimrc https://raw.githubusercontent.com/mvbattista/dotfiles/master/.vimrc
+wget -O ~/.zshrc https://raw.githubusercontent.com/mvbattista/dotfiles/main/.zshrc
+wget -O ~/.gitconfig https://raw.githubusercontent.com/mvbattista/dotfiles/main/.gitconfig
+wget -O ~/.gitignore https://raw.githubusercontent.com/mvbattista/dotfiles/main/.gitignore
+wget -O ~/.vimrc https://raw.githubusercontent.com/mvbattista/dotfiles/main/.vimrc
 
 echo "Installing Oh My Zsh"
 sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"

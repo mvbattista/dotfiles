@@ -90,8 +90,8 @@ pip3 install virtualenvwrapper
 pip3 install selenium
 pip3 install Django
 
-wget -O ~/.bashrc https://raw.githubusercontent.com/mvbattista/dotfiles/master/.bashrc
-wget -O ~/.gitconfig https://raw.githubusercontent.com/mvbattista/dotfiles/master/.gitconfig
-wget -O ~/.bash_profile https://raw.githubusercontent.com/mvbattista/dotfiles/master/.bash_profile
-wget -O ~/.vimrc https://raw.githubusercontent.com/mvbattista/dotfiles/master/.vimrc
+wget -O ~/.bashrc https://raw.githubusercontent.com/mvbattista/dotfiles/main/.bashrc
+wget -O ~/.gitconfig https://raw.githubusercontent.com/mvbattista/dotfiles/main/.gitconfig
+wget -O ~/.bash_profile https://raw.githubusercontent.com/mvbattista/dotfiles/main/.bash_profile
+wget -O ~/.vimrc https://raw.githubusercontent.com/mvbattista/dotfiles/main/.vimrc
 
