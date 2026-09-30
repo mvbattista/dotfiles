@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copy dotfiles from this repo into $HOME for a profile (common + personal|work).
 # Usage: install.sh [--profile personal|work] [--dry-run]
-# Existing differing targets are backed up to <target>.bak before overwrite.
+# Targets that differ are backed up to ~/.dotfiles-backup/<timestamp>/ before being replaced.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")" && pwd)"
@@ -25,9 +25,15 @@ case "$PROFILE" in
   *) echo "profile required: --profile personal|work" >&2; exit 2 ;;
 esac
 
-layer_present() {
-  # work layer is a private submodule; empty dir means not checked out
-  [ "$1" != work ] || [ -e "$ROOT/work/.git" ]
+TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
+# shellcheck source=lib.sh
+. "$ROOT/lib.sh"
+
+backup() {
+  local rel="${1#"$HOME"/}"
+  mkdir -p "$BACKUP_DIR/$(dirname "$rel")"
+  cp -R "$1" "$BACKUP_DIR/$rel"
 }
 
 if ! layer_present "$PROFILE"; then
@@ -35,20 +41,25 @@ if ! layer_present "$PROFILE"; then
 fi
 
 copied=0
-while read -r layer repo_path home_path; do
+while read -r layer repo_path home_path flag; do
   case "$layer" in ''|\#*) continue ;; esac
   [ "$layer" = common ] || [ "$layer" = "$PROFILE" ] || continue
   layer_present "$layer" || continue
-  src="$ROOT/$layer/$repo_path"
   dst="${home_path/#\~/$HOME}"
-  if [ ! -e "$src" ]; then echo "missing in repo: $layer/$repo_path" >&2; continue; fi
-  if [ -e "$dst" ] && diff -rq "$src" "$dst" >/dev/null 2>&1; then continue; fi
+  if [ "${flag:-}" = merge ]; then
+    src="$(merged_json "$repo_path")"
+    json_same "$src" "$dst" && continue
+  else
+    src="$ROOT/$layer/$repo_path"
+    if [ ! -e "$src" ]; then echo "missing in repo: $layer/$repo_path" >&2; continue; fi
+    if [ -e "$dst" ] && diff -rq "$src" "$dst" >/dev/null 2>&1; then continue; fi
+  fi
   if [ "$DRY_RUN" = 1 ]; then
-    echo "would copy: $layer/$repo_path -> $dst$([ -e "$dst" ] && echo ' (backup .bak)')"
+    echo "would copy: $layer/$repo_path -> $dst$([ -e "$dst" ] && echo ' (existing backed up)')"
   else
     mkdir -p "$(dirname "$dst")"
-    [ -e "$dst" ] && cp -R "$dst" "$dst.bak"
-    cp -R "$src" "$dst"
+    [ -e "$dst" ] && backup "$dst"
+    if [ -d "$src" ]; then mkdir -p "$dst"; rsync -a --delete "$src/" "$dst/"; else cp "$src" "$dst"; fi
     # ssh refuses loose permissions
     case "$dst" in "$HOME"/.ssh/*) chmod 700 "$HOME/.ssh"; chmod 600 "$dst" ;; esac
     echo "copied: $layer/$repo_path -> $dst"
@@ -56,5 +67,6 @@ while read -r layer repo_path home_path; do
   copied=$((copied + 1))
 done < "$MANIFEST"
 
-echo "$copied file(s) $([ "$DRY_RUN" = 1 ] && echo 'would change' || echo 'changed') (profile: $PROFILE)"
+echo "$copied item(s) $([ "$DRY_RUN" = 1 ] && echo 'would change' || echo 'changed') (profile: $PROFILE)"
 [ "$DRY_RUN" = 1 ] || echo "$PROFILE" > "$PROFILE_FILE"
+[ "$DRY_RUN" = 1 ] || [ ! -d "$BACKUP_DIR" ] || echo "backups: $BACKUP_DIR"

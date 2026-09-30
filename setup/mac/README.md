@@ -9,7 +9,7 @@ cd dotfiles && sh setup/mac/init.sh <personal|work> [computer-name]
 2. Installs the Xcode CLI tools and Homebrew, and adds `brew shellenv` to `~/.zprofile`.
 3. `work` only: fetches the private `work/` submodule.
 4. Runs `brew bundle` on `common/Brewfile`, then `<profile>/Brewfile` if it exists.
-5. Runs `install.sh --profile <profile>` to copy the dotfiles (existing files are backed up to `*.bak`).
+5. Runs `install.sh --profile <profile>` to copy the dotfiles (replaced files are backed up to `~/.dotfiles-backup/<timestamp>/`).
 6. Installs Oh My Zsh (keeping the installed `.zshrc`) and the autosuggestions/syntax-highlighting plugins.
 7. Opens Alfred, Clipy and BetterSnapTool.
 

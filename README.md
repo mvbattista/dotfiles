@@ -40,7 +40,7 @@ git -C work config core.hooksPath ../hooks   # work machines
 git clone git@github.com:mvbattista/dotfiles.git && cd dotfiles
 git submodule update --init --checkout work   # work machines only; needs access to the private repo
 ./install.sh --profile work --dry-run         # or --profile personal; shows what would change
-./install.sh --profile work                   # copies files into $HOME, backs up differing targets to *.bak
+./install.sh --profile work                   # copies files into $HOME, backs up differing targets to ~/.dotfiles-backup/<timestamp>/
 ```
 
 | Command | What it does |
@@ -50,7 +50,20 @@ git submodule update --init --checkout work   # work machines only; needs access
 | `sync.sh pull` | copy drifted home files back into the repo; refuses secret-looking content; never commits or pushes |
 | `sync.sh push` | repo -> home (runs `install.sh` with the saved profile) |
 
-`manifest.txt` rows: `layer  repo-path (relative to the layer dir)  home-path`.
+`manifest.txt` rows: `layer  repo-path (relative to the layer dir)  home-path  [merge]`. Directories (such as Claude skills) are synced with rsync. A `merge` row is a JSON file built by deep-merging `common/<path>` with the profile overlay `<profile>/<path>` (`settings.json` + `settings.work.json`); objects merge and arrays replace, so don't split one array across layers. Merged files are checked by `sync.sh check` but never pulled automatically; edit the layer files by hand.
+
+## Claude Code config
+
+`~/.claude` is tracked selectively under `claude/` in each layer:
+
+| Item | Layer | Notes |
+|---|---|---|
+| `CLAUDE.md` | common | working standards; imports `~/.claude/CLAUDE.work.md` at the end (work layer supplies it; on other profiles the import has nothing to load) |
+| `settings.json` | common, merged | hooks, status line, plugins, model. The `work` overlay adds `autoMode`. Paths use `$HOME` |
+| `statusline-command.sh`, `sounds/` | common | hook sounds are played with macOS `afplay`; the iTerm status hook needs iTerm's `cc-status` utility |
+| `skills/` | common (generic) / work (org-specific) | one directory per skill |
+
+Never tracked: `settings.local.json`, history, projects and memory, sessions, plans, telemetry, caches, daemon and auth state, `plugins/` (machine paths; plugins are declared in `settings.json`), and `skills/synced`.
 
 ## What is tracked
 

@@ -13,3 +13,15 @@ common .gitignore_global ~/.gitignore_global
 common .config/btop/btop.conf ~/.config/btop/btop.conf
 work ssh/config ~/.ssh/config
 personal .gitconfig.local ~/.gitconfig.local
+common claude/CLAUDE.md ~/.claude/CLAUDE.md
+common claude/settings.json ~/.claude/settings.json merge
+common claude/statusline-command.sh ~/.claude/statusline-command.sh
+common claude/sounds ~/.claude/sounds
+common claude/skills/grill-me ~/.claude/skills/grill-me
+common claude/skills/safe-migration ~/.claude/skills/safe-migration
+work claude/CLAUDE.work.md ~/.claude/CLAUDE.work.md
+work claude/skills/ship-branch ~/.claude/skills/ship-branch
+work claude/skills/jira-update ~/.claude/skills/jira-update
+work claude/skills/provider-replicate ~/.claude/skills/provider-replicate
+work claude/skills/schema-sync ~/.claude/skills/schema-sync
+work claude/skills/sync-preview ~/.claude/skills/sync-preview

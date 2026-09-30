@@ -35,20 +35,32 @@ fi
 
 [ -f "$PROFILE_FILE" ] || { echo "no $PROFILE_FILE; run install.sh --profile personal|work first" >&2; exit 2; }
 PROFILE="$(cat "$PROFILE_FILE")"
-
-layer_present() { [ "$1" != work ] || [ -e "$ROOT/work/.git" ]; }
-
 if [ "$CMD" = push ]; then exec "$ROOT/install.sh" --profile "$PROFILE"; fi
+TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
+# shellcheck source=lib.sh
+. "$ROOT/lib.sh"
+
 case "$CMD" in check|pull) ;; *) echo "usage: sync.sh check|pull|push|scan" >&2; exit 2 ;; esac
 
 drift=0
-while read -r layer repo_path home_path; do
+while read -r layer repo_path home_path flag; do
   case "$layer" in ''|\#*) continue ;; esac
   [ "$layer" = common ] || [ "$layer" = "$PROFILE" ] || continue
   layer_present "$layer" || continue
-  src="$ROOT/$layer/$repo_path"
   dst="${home_path/#\~/$HOME}"
   [ -e "$dst" ] || { echo "missing in home: $dst"; drift=1; continue; }
+  if [ "${flag:-}" = merge ]; then
+    src="$(merged_json "$repo_path")"
+    json_same "$src" "$dst" && continue
+    drift=1
+    echo "drift (merged): common/$repo_path + $PROFILE overlay vs $dst"
+    if [ "$CMD" = pull ]; then
+      echo "  merged files are not pulled automatically; edit the layer files by hand."
+      echo "  top-level keys only in home: $(jq -rn --slurpfile h "$dst" --slurpfile m "$src" '(($h[0]|keys)-($m[0]|keys))|join(",")')"
+    fi
+    continue
+  fi
+  src="$ROOT/$layer/$repo_path"
   [ -e "$src" ] || { echo "missing in repo: $layer/$repo_path"; drift=1; continue; }
   diff -rq "$src" "$dst" >/dev/null 2>&1 && continue
   drift=1
@@ -58,7 +70,7 @@ while read -r layer repo_path home_path; do
     echo "REFUSED (secret/machine pattern) at: $(grep -rEIn "$(pattern_for "$layer")" "$dst" | cut -d: -f1,2 | head -5 | tr '\n' ' ')" >&2
     echo "  fix the home file or move the value to ~/.secrets, then re-run" >&2
   else
-    cp -R "$dst" "$src"
+    if [ -d "$dst" ]; then mkdir -p "$src"; rsync -a --delete "$dst/" "$src/"; else cp "$dst" "$src"; fi
     echo "pulled: $dst -> $layer/$repo_path"
   fi
 done < "$MANIFEST"
