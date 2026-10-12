@@ -79,6 +79,6 @@ credentials and cloud/container config (`~/.aws`, `~/.kube`, `~/.docker`, `~/.co
 
 ## Setup scripts
 
-- `setup/mac/`: new-Mac bootstrap (`init.sh <personal|work> [computer-name]`); see `setup/mac/README.md`.
+- `setup/mac/`: new-Mac bootstrap (`init.sh <personal|work> [computer-name]`); see `setup/mac/README.md`. Test it with `setup/mac/test-init.sh <profile>`, never by running `init.sh` directly (it installs real software).
 - `personal/raspberry-pi/`: Raspberry Pi setup scripts.
 - Homebrew packages: `common/Brewfile` (everywhere) plus `<profile>/Brewfile` (e.g. `personal/Brewfile`); `init.sh` runs both.

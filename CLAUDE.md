@@ -11,9 +11,10 @@ Public repo. Layered dotfiles: `common/` (everywhere), `personal/`, and `work/` 
 - **Manifest is the source of truth** for what is tracked: `layer  repo-path  home-path`. Add a row when tracking a new file.
 - **Secret guard** (`secret-patterns.sh`, run by `sync.sh pull` and the `hooks/pre-commit` hook): credentials (AWS/GitHub/Slack tokens, private keys, `..._TOKEN`/`..._KEY`/`..._SECRET` assignments, passwords, URLs with embedded credentials) are refused in every layer. IPv4 addresses and `/Users/<name>` paths are refused everywhere except `work/`. Fix the content instead of bypassing the guard.
 - **Enable the hook per clone:** `git config core.hooksPath hooks` here, and `git -C work config core.hooksPath ../hooks` for the submodule (the setting is repo-local, so clones don't inherit it).
+- **Never test `setup/mac/init.sh` by running it, and never run real `brew` to test.** It installs real software. Use `setup/mac/test-init.sh <profile> [name]` (scratch `$HOME`, stubbed commands, real brew off `PATH`, sandboxed writes). `brew shellenv` puts the real brew first on `PATH` and defeats stubs, so `init.sh` honours `BREW_BIN`; keep that override.
 - **Two-step commits for `work/`:** commit in the submodule, then the pointer here. `work/` has `update = none`, so plain clones never fetch it.
 - Commits: gitmoji + imperative subject (<=50 chars, never >72). Default branch `main`. Author `github@mvbattista.com` (pinned locally). Commit and push only when asked.
 
 ## Verify
 
-`bash -n install.sh sync.sh`, `sh -n hooks/pre-commit`, `./install.sh --profile <p> --dry-run`, `./sync.sh check`.
+`bash -n install.sh sync.sh setup/mac/test-init.sh`, `sh -n hooks/pre-commit setup/mac/init.sh`, `setup/mac/test-init.sh <profile>`, `./install.sh --profile <p> --dry-run`, `./sync.sh check`.

@@ -40,7 +40,8 @@ if ! command -v brew >/dev/null 2>&1; then
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 # Put Homebrew on PATH now and for future login shells (Apple Silicon: /opt/homebrew, Intel: /usr/local)
-BREW_BIN=/opt/homebrew/bin/brew
+# BREW_BIN can be overridden (setup/mac/test-init.sh points it at a stub so tests never reach real Homebrew)
+BREW_BIN="${BREW_BIN:-/opt/homebrew/bin/brew}"
 [ -x "$BREW_BIN" ] || BREW_BIN=/usr/local/bin/brew
 eval "$("$BREW_BIN" shellenv)"
 grep -qs 'brew shellenv' ~/.zprofile || echo "eval \"\$($BREW_BIN shellenv)\"" >> ~/.zprofile
